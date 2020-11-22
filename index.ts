@@ -2,6 +2,7 @@ import { server } from './src/server';
 import { Request, Response } from "express";
 import { routeLog } from "./decorators/log";
 import { METHOD, routeConfig } from "./decorators/config";
+import { routesAuth } from "./decorators/auth";
 
 class Routes {
     @routeConfig({
@@ -13,6 +14,7 @@ class Routes {
     }
 
     @routeLog()
+    @routesAuth('123')
     @routeConfig({
         method: METHOD.POST,
         path: "/post"
