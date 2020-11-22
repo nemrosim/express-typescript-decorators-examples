@@ -40,7 +40,10 @@ export class Server {
 
     public start() {
         this._server = this._app.listen(this._app.get("port"), () => {
-            console.log("Server is running on port " + this._app.get("port"));
+            console.log("🚀 Server is running on port " + this._app.get("port"));
         });
     }
 }
+
+export const server = new Server();
+

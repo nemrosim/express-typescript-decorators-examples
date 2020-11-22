@@ -1,40 +1,36 @@
-import { Server } from './src/server';
+import { server } from './src/server';
 import { Request, Response } from "express";
-
-enum METHOD {
-    GET = 'get',
-    POST = 'post'
-}
-
-const server = new Server();
+import { routeLog } from "./decorators/log";
+import { METHOD, routeConfig } from "./decorators/config";
 
 class Routes {
     @routeConfig({
         method: METHOD.GET,
         path: "/hello"
     })
-    public hello(req: Request, res: Response) {
-        return {
-            firstName: 'John',
-            lastName: 'Doe'
-        };
+    public anyNameYouLike(req: Request, res: Response) {
+        return "Hello World!";
     }
-}
 
-interface RouteConfigProps {
-    method: METHOD;
-    path: string;
-}
+    @routeLog()
+    @routeConfig({
+        method: METHOD.POST,
+        path: "/post"
+    })
+    public async postExample(req: Request, res: Response) {
+        let timeoutId;
+        try {
+            const result = new Promise((resolve) => {
+                timeoutId = setTimeout(() => {
+                    resolve("After 2 seconds");
+                }, 2000)
+            });
 
-function routeConfig({method, path}: RouteConfigProps): MethodDecorator {
-    return function (
-        target: Object,
-        propertyKey: string | symbol,
-        descriptor: PropertyDescriptor
-    ) {
-        server.app[method](path, (req: Request, res: Response) => {
-            res.status(200).json(descriptor.value(req, res));
-        });
+            return await result;
+        } catch (error) {
+            timeoutId && clearTimeout(timeoutId);
+            return "Some error message";
+        }
     }
 }
 
