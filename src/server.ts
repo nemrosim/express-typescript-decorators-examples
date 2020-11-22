@@ -2,6 +2,7 @@ import * as http from "http";
 import express, { Express } from "express";
 import bodyParser from "body-parser";
 
+
 export class Server {
     private readonly _app: Express;
 
@@ -26,7 +27,7 @@ export class Server {
     public configureMiddleware() {
         // Required for POST requests
         this._app.use(bodyParser.json());
-        this._app.use(bodyParser.urlencoded({ extended: true }));
+        this._app.use(bodyParser.urlencoded({extended: true}));
 
         // CORS
         this.app.use(function (req, res, next) {
